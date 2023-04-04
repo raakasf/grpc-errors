@@ -1,6 +1,8 @@
+#include <chrono>
 #include <iostream>
 #include <memory>
 #include <string>
+#include <thread>
 
 #include <grpc++/grpc++.h>
 
@@ -69,6 +71,7 @@ int main(int argc, char **argv) {
   while (true) {
     // the failing case
     client.SayHelloStrict("Leonhard whaaaaa");
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }
   
   return 0;
