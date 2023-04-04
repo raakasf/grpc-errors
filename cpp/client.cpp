@@ -15,11 +15,11 @@ using hello::HelloResp;
 using hello::HelloService;
 
 class HelloServiceClient {
- public:
+public:
   HelloServiceClient(std::shared_ptr<Channel> channel)
       : stub_(HelloService::NewStub(channel)) {}
 
-  std::string SayHello(const std::string& name) {
+  std::string SayHello(const std::string &name) {
     HelloReq request;
     request.set_name(name);
     HelloResp response;
@@ -31,7 +31,7 @@ class HelloServiceClient {
     return response.result();
   }
 
-  void SayHelloStrict(const std::string& name) {
+  void SayHelloStrict(const std::string &name) {
     HelloReq request;
     request.set_name(name);
     HelloResp response;
@@ -45,28 +45,31 @@ class HelloServiceClient {
       // ouch!
       // lets print the gRPC error message
       // which is "Length of `Name` cannot be more than 10 characters"
-      std::cout << status.error_message() << std::endl;
+      std::cout << "error_message=" << status.error_message() << std::endl;
       // lets print the error code, which is 3
-      std::cout << status.error_code() << std::endl;
+      std::cout << "error_code=" << status.error_code() << std::endl;
+      std::cout << "error_details=" << status.error_details() << std::endl;
       // want to do some specific action based on the error?
-      if(status.error_code() == StatusCode::INVALID_ARGUMENT) {
+      if (status.error_code() == StatusCode::INVALID_ARGUMENT) {
         // do your thing here
       }
       return;
     }
   }
 
- private:
+private:
   std::unique_ptr<HelloService::Stub> stub_;
 };
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   HelloServiceClient client(grpc::CreateChannel(
       "localhost:50051", grpc::InsecureChannelCredentials()));
   std::cout << client.SayHello("Euler") << std::endl;
 
-  // the failing case
-  client.SayHelloStrict("Leonhard Euler");
+  while (true) {
+    // the failing case
+    client.SayHelloStrict("Leonhard whaaaaa");
+  }
   
   return 0;
 }

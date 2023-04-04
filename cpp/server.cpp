@@ -28,6 +28,7 @@ class HelloServiceImpl final : public HelloService::Service {
     std::string name(request->name());
     if (name.length() >= 10) {
       std::string msg("Length of `Name` cannot be more than 10 characters");
+      std::cout << msg << std::endl;
       return Status(StatusCode::INVALID_ARGUMENT, msg);
     }
     reply->set_result("Hey, " + name + "!");
